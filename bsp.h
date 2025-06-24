@@ -181,8 +181,8 @@ public:
     void makeInternal(const PlaneInfo& splitting_plane) {
         plane = splitting_plane;
         is_leaf = false;
-        front = std::make_unique<BSPNode>();
-        back = std::make_unique<BSPNode>();
+        front.reset(new BSPNode());
+        back.reset(new BSPNode());
     }
     
     // verifica se o no tem filhos
@@ -202,6 +202,16 @@ private:
     void splitTriangles(const std::vector<Triangle>& triangles, const PlaneInfo& plane,
                        std::vector<Triangle>& front_triangles, std::vector<Triangle>& back_triangles,
                        std::vector<Triangle>& coplanar_triangles);
+    void splitSpanningTriangle(const Triangle& triangle, const PlaneInfo& plane,
+                              std::vector<Triangle>& front_parts, std::vector<Triangle>& back_parts);
+    void splitTriangleOneTwo(const Triangle& triangle, const PlaneInfo& plane,
+                            const int vertex_classification[3], bool one_front_two_back,
+                            std::vector<Triangle>& front_parts, std::vector<Triangle>& back_parts);
+    void splitTriangleWithVertexOnPlane(const Triangle& triangle, const PlaneInfo& plane,
+                                       const int vertex_classification[3],
+                                       std::vector<Triangle>& front_parts, std::vector<Triangle>& back_parts);
+    bool calculateEdgePlaneIntersection(const Point3D& p1, const Point3D& p2, 
+                                       const PlaneInfo& plane, Point3D& intersection);
     
     // metodos auxiliares para consulta
     void querySegmentRecursive(BSPNode* node, const Segment& segment, 
@@ -211,7 +221,7 @@ private:
                               const Triangle& triangle, double& t);
 
 public:
-    BSPTree() : root(std::make_unique<BSPNode>()) {}
+    BSPTree() : root(new BSPNode()) {}
     
     // constroi a arvore bsp a partir de uma lista de triangulos
     void build(std::vector<Triangle>& triangles);
@@ -228,29 +238,7 @@ public:
     void printTreeInfo() const;
 };
 
-// estrutura para armazenar dados de entrada do problema
-struct BSPInput {
-    std::vector<Point3D> points;        // lista de pontos (1-based indexing)
-    std::vector<Triangle> triangles;    // lista de triangulos
-    std::vector<Segment> segments;      // lista de segmentos
-    
-    // carrega dados da entrada padrao
-    bool loadFromStdin();
-    
-    // valida os dados de entrada
-    bool validate() const;
-};
-
-// estrutura para armazenar resultados da consulta
-struct BSPOutput {
-    std::vector<std::vector<int>> results;  // para cada segmento, lista de triangulos intersectados
-    
-    // escreve resultados na saida padrao
-    void writeToStdout() const;
-    
-    // formata uma linha de resultado
-    std::string formatResult(const std::vector<int>& triangle_ids) const;
-};
+// estruturas BSPInput e BSPOutput foram movidas para io.h
 
 // funcoes utilitarias geometricas
 namespace GeometryUtils {
