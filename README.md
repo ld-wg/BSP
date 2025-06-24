@@ -14,6 +14,63 @@ Implementação de árvore BSP (Binary Space Partitioning) para triângulos no R
 └── Makefile
 ```
 
+## Como Usar
+
+**Compilação:**
+
+```bash
+make          # Normal
+make debug    # Com debug
+make clean    # Limpeza
+```
+
+**Execução:**
+
+```bash
+./bsp < entrada.txt > saida.txt    # Normal
+./bsp --debug < entrada.txt        # Debug
+```
+
+**Formato entrada:**
+
+```
+n t l
+x₁ y₁ z₁
+x₂ y₂ z₂
+...
+xₙ yₙ zₙ
+i₁ j₁ k₁
+i₂ j₂ k₂
+...
+iₜ jₖ kₜ
+xa₁ ya₁ za₁ xb₁ yb₁ zb₁
+xa₂ ya₂ za₂ xb₂ yb₂ zb₂
+...
+xaₗ yaₗ zaₗ xbₗ ybₗ zbₗ
+```
+
+**Onde:**
+
+- `n`: número de pontos
+- `t`: número de triângulos
+- `l`: número de segmentos
+- Coordenadas: números inteiros entre 1 e 99
+- Índices: 1-based para pontos e triângulos
+
+### **Formato de Saída**
+
+```
+k₁ id₁ id₂ ... idₖ₁
+k₂ id₁ id₂ ... idₖ₂
+...
+kₗ id₁ id₂ ... idₖₗ
+```
+
+**Onde:**
+
+- `kᵢ`: número de triângulos intersectados pelo segmento i
+- `id₁ id₂ ... idₖᵢ`: IDs dos triângulos, **ordenados crescentemente**
+
 ## Estruturas de Dados
 
 ### **Point3D** - Pontos no Espaço 3D
@@ -776,63 +833,6 @@ calculateEdgePlaneIntersection
 - Segmento atravessa toda a cena
 - Visita todas as folhas da árvore
 - Total: O(n)
-
-## Como Usar
-
-**Compilação:**
-
-```bash
-make          # Normal
-make debug    # Com debug
-make clean    # Limpeza
-```
-
-**Execução:**
-
-```bash
-./bsp < entrada.txt > saida.txt    # Normal
-./bsp --debug < entrada.txt        # Debug
-```
-
-**Formato entrada:**
-
-```
-n t l
-x₁ y₁ z₁
-x₂ y₂ z₂
-...
-xₙ yₙ zₙ
-i₁ j₁ k₁
-i₂ j₂ k₂
-...
-iₜ jₖ kₜ
-xa₁ ya₁ za₁ xb₁ yb₁ zb₁
-xa₂ ya₂ za₂ xb₂ yb₂ zb₂
-...
-xaₗ yaₗ zaₗ xbₗ ybₗ zbₗ
-```
-
-**Onde:**
-
-- `n`: número de pontos
-- `t`: número de triângulos
-- `l`: número de segmentos
-- Coordenadas: números inteiros entre 1 e 99
-- Índices: 1-based para pontos e triângulos
-
-### **Formato de Saída**
-
-```
-k₁ id₁ id₂ ... idₖ₁
-k₂ id₁ id₂ ... idₖ₂
-...
-kₗ id₁ id₂ ... idₖₗ
-```
-
-**Onde:**
-
-- `kᵢ`: número de triângulos intersectados pelo segmento i
-- `id₁ id₂ ... idₖᵢ`: IDs dos triângulos, **ordenados crescentemente**
 
 ## Considerações Técnicas
 
